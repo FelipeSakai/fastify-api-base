@@ -6,7 +6,20 @@ const envSchema = z.object({
     .enum(['development', 'production', 'test'])
     .default('development'),
   PORT: z.coerce.number().int().min(1).max(65535).default(3000),
+  DATABASE_URL: z
+    .string()
+    .min(1, 'DATABASE_URL is required')
+    .refine((value) => isValidUrl(value), 'DATABASE_URL must be a valid URL'),
 })
+
+const isValidUrl = (value: string) => {
+  try {
+    new URL(value)
+    return true
+  } catch {
+    return false
+  }
+}
 
 const parsed = envSchema.safeParse(process.env)
 

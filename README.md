@@ -14,9 +14,9 @@ organização de código e ferramentas modernas do ecossistema backend.
 
 ## Estrutura
 
-src/
-env.ts 
-server.ts 
+src/  
+env.ts  
+server.ts
 
 ## Setup do projeto
 
