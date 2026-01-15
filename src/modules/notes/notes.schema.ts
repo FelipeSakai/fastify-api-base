@@ -6,8 +6,21 @@ export const createNoteBodySchema = z.object({
 })
 
 export const noteSchema = z.object({
-  id: z.string().uuid(),
+  id: z.uuid(),
   title: z.string(),
   content: z.string().nullable().optional(),
   createdAt: z.coerce.date(),
 })
+
+export const noteIdParamSchema = z.object({
+  id: z.uuid(),
+})
+
+export const updateNoteBodySchema = z
+  .object({
+    title: z.string().min(1).optional(),
+    content: z.string().min(1).optional(),
+  })
+  .refine((data) => Object.keys(data).length > 0, {
+    message: 'At least one field (title or content) must be provided',
+  })
