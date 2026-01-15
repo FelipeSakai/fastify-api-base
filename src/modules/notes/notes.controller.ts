@@ -1,6 +1,7 @@
 import type { FastifyReply, FastifyRequest } from 'fastify'
 import {
   createNoteBodySchema,
+  listNotesQuerySchema,
   noteIdParamSchema,
   updateNoteBodySchema,
 } from './notes.schema.js'
@@ -28,8 +29,9 @@ export async function listNotesController(
   request: FastifyRequest,
   reply: FastifyReply,
 ) {
-  const notes = await listNotes()
-  return reply.send(notes)
+  const { page, limit } = listNotesQuerySchema.parse(request.query)
+  const notes = await listNotes(page, limit)
+  return reply.send({ page, limit, data: notes })
 }
 
 export async function updateNoteController(

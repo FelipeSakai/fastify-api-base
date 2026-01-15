@@ -1,7 +1,6 @@
 import { desc, eq } from 'drizzle-orm'
 import { db } from '../../db/index.js'
 import { notes } from '../../db/schema.js'
-import { error } from 'node:console'
 
 type CreateNoteInput = {
   title: string
@@ -20,8 +19,14 @@ export async function createNote(input: CreateNoteInput) {
   return created
 }
 
-export async function listNotes() {
-  const rows = await db.select().from(notes).orderBy(desc(notes.createdAt))
+export async function listNotes(page: number, limit: number) {
+  const offset = (page - 1) * limit
+  const rows = await db
+    .select()
+    .from(notes)
+    .orderBy(desc(notes.createdAt))
+    .limit(limit)
+    .offset(offset)
 
   return rows
 }
@@ -41,7 +46,7 @@ export async function deleteNote(id: string) {
   if (!deleted) {
     throw new Error('Note not found')
   }
-  
+
   return deleted
 }
 
