@@ -52,9 +52,11 @@ export async function getNoteByIdController(
   const { id } = noteIdParamSchema.parse(request.params)
 
   const note = await getNoteById(id)
+  if (!note) return reply.code(404).send({ message: 'Note not found' })
 
   return reply.send(note)
 }
+
 
 export async function deleteController(
   request: FastifyRequest,

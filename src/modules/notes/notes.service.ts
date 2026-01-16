@@ -37,17 +37,13 @@ export async function getNoteById(id: string) {
   if (!rows) {
     throw new Error('Note not found')
   }
-  return rows[0]
+  return rows[0] ?? null
 }
 
 export async function deleteNote(id: string) {
   const [deleted] = await db.delete(notes).where(eq(notes.id, id)).returning()
 
-  if (!deleted) {
-    throw new Error('Note not found')
-  }
-
-  return deleted
+  return deleted ?? null
 }
 
 export async function updateNote(
@@ -63,5 +59,5 @@ export async function updateNote(
     .where(eq(notes.id, id))
     .returning()
 
-  return updated
+  return updated ?? null
 }
